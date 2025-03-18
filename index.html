@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevStudy Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-code"></i>
+            <h1>DevBuddy</h1>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" data-page="topics">
+                <i class="fas fa-list-check"></i>
+                <span>Topics</span>
+            </a>
+            <a href="#" data-page="challenges">
+                <i class="fas fa-code"></i>
+                <span>Challenges</span>
+            </a>
+            <a href="#" data-page="notes">
+                <i class="fas fa-note-sticky"></i>
+                <span>Notes</span>
+            </a>
+            <a href="#" data-page="flashcards">
+                <i class="fas fa-clipboard-question"></i>
+                <span>Flashcards</span>
+            </a>
+        </div>
+        <div class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+            <span>Dark Mode</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page" id="dashboard">
+            <div class="header">
+                <h2>Dashboard</h2>
+                <div class="header-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i>
+                        Export Data
+                    </button>
+                    <button class="btn" id="addTopicBtnDash">
+                        <i class="fas fa-plus"></i>
+                        Add Topic
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Progress Overview</h3>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-card">
+                        <canvas id="topicsChart"></canvas>
+                    </div>
+                    <div class="progress-card">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card daily-challenge">
+                <div class="challenge-header">
+                    <h3>Daily Coding Challenge</h3>
+                    <span class="challenge-difficulty medium" id="dashboardDifficulty">Medium</span>
+                </div>
+                <div class="challenge-content" id="dashboardChallenge">
+                    <h4>Two Sum</h4>
+                    <p>Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.</p>
+                </div>
+                <div class="challenge-actions">
+                    <button class="btn btn-outline">Skip</button>
+                    <button class="btn">Solve Challenge</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Topics</h3>
+                </div>
+                <table class="topics-table">
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Category</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentTopics"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="page" id="topics" style="display: none;">
+            <div class="header">
+                <h2>Topics</h2>
+                <div class="header-actions">
+                    <button class="btn" id="addTopicBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Topic
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>All Topics</h3>
+                    <div class="search-container">
+                        <input type="text" placeholder="Search topics..." id="topicSearch" class="search-input">
+                    </div>
+                </div>
+                <table class="topics-table">
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Category</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allTopics"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="page" id="challenges" style="display: none;">
+            <div class="header">
+                <h2>Coding Challenges</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Today's Challenge</h3>
+                </div>
+                <div id="todayChallenge"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Challenge History</h3>
+                </div>
+                <table class="topics-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Challenge</th>
+                            <th>Difficulty</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="challengeHistory"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="page" id="notes" style="display: none;">
+            <div class="header">
+                <h2>Notes</h2>
+                <div class="header-actions">
+                    <button class="btn" id="saveNotesBtn">
+                        <i class="fas fa-save"></i>
+                        Save Notes
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Your Study Notes</h3>
+                </div>
+                <textarea id="notesInput" class="notes-input" placeholder="Write your study notes here..."></textarea>
+            </div>
+        </div>
+
+        <div class="page" id="flashcards" style="display: none;">
+            <div class="header">
+                <h2>Flashcards</h2>
+                <div class="header-actions">
+                    <button class="btn" id="addFlashcardBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Flashcard
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Your Flashcards</h3>
+                </div>
+                <div class="flashcards-container" id="flashcardsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addTopicModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Topic</h3>
+                <button class="modal-close" id="closeTopicModal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="topicName">Topic Name</label>
+                <input type="text" id="topicName" class="form-control" placeholder="Enter topic name">
+            </div>
+            <div class="form-group">
+                <label for="topicCategory">Category</label>
+                <select id="topicCategory" class="form-control">
+                    <option value="HTML">HTML</option>
+                    <option value="CSS">CSS</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="Frameworks">Frameworks</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancelTopicBtn">Cancel</button>
+                <button class="btn" id="saveTopicBtn">Save Topic</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addFlashcardModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Flashcard</h3>
+                <button class="modal-close" id="closeFlashcardModal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="flashcardQuestion">Question</label>
+                <textarea id="flashcardQuestion" class="form-control" placeholder="Enter question"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="flashcardAnswer">Answer</label>
+                <textarea id="flashcardAnswer" class="form-control" placeholder="Enter answer"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancelFlashcardBtn">Cancel</button>
+                <button class="btn" id="saveFlashcardBtn">Save Flashcard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
